@@ -1,6 +1,8 @@
 package kg.mega.trainvoyage.controllers;
 
+import jakarta.servlet.ServletRequest;
 import jakarta.validation.Valid;
+import kg.mega.trainvoyage.models.Passenger;
 import kg.mega.trainvoyage.models.Voyage;
 import kg.mega.trainvoyage.models.dto.VoyageCreateDto;
 import kg.mega.trainvoyage.services.VoyageService;
@@ -33,9 +35,14 @@ public class VoyageController {
     public Voyage findById(@PathVariable Long id) {
         return voyageService.findById(id);
     }
-    @GetMapping("/all")
-    public List<Voyage> findAll(@RequestParam int pageNo, @RequestParam int sizePage) {
+    @GetMapping("/list")
+    public List<Voyage> findAlltoList(@RequestParam int pageNo, @RequestParam int sizePage) {
 
-        return voyageService.findAll(pageNo, sizePage);
+        return voyageService.findAllToList(pageNo, sizePage);
+    }
+    @GetMapping("/all")
+    public List<Voyage> findAll() {
+
+        return voyageService.findAll();
     }
 }

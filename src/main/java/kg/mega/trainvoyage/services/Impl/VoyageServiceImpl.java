@@ -48,9 +48,14 @@ public class VoyageServiceImpl implements VoyageService {
     }
 
     @Override
-    public List<Voyage> findAll(int pageNo, int sizePage) {
+    public List<Voyage> findAllToList(int pageNo, int sizePage) {
         Pageable pageable = PageRequest.of(pageNo, sizePage, Sort.by(Sort.Direction.DESC, "id"));
         return voyageRepo.findAll(pageable).toList();
+    }
+
+    @Override
+    public List<Voyage> findAll() {
+        return voyageRepo.findAll();
     }
 
     @Override

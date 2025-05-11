@@ -8,6 +8,8 @@ import kg.mega.trainvoyage.models.Voyage;
 import kg.mega.trainvoyage.models.dto.TicketCreateDto;
 import kg.mega.trainvoyage.repositories.TicketRepo;
 import kg.mega.trainvoyage.services.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -56,5 +58,11 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket findById(Long id) {
         return ticketRepo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
+    }
+
+    @Override
+    public List<Ticket> findAllToList(int pageNo, int sizePage) {
+        Pageable pageable = PageRequest.of(pageNo, sizePage);
+        return ticketRepo.findAll(pageable).toList();
     }
 }

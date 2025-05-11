@@ -1,6 +1,7 @@
 package kg.mega.trainvoyage.controllers;
 
 import jakarta.validation.Valid;
+import kg.mega.trainvoyage.models.Passenger;
 import kg.mega.trainvoyage.models.Ticket;
 import kg.mega.trainvoyage.models.dto.TicketCreateDto;
 import kg.mega.trainvoyage.services.TicketService;
@@ -32,6 +33,11 @@ public class TicketController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(tickets);
+    }
+    @GetMapping("/list")
+    public List<Ticket> findAll(@RequestParam int pageNo, @RequestParam int sizePage) {
+
+        return ticketService.findAllToList(pageNo, sizePage);
     }
     @GetMapping("/{id}")
     public Ticket getById(@PathVariable("id") Long id) {

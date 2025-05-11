@@ -8,6 +8,9 @@ import java.util.List;
 public interface VoyageService {
     VoyageCreateDto create(VoyageCreateDto voyageCreateDto);
 
-    List<Voyage> findAll(int pageNo, int sizePage   );
     Voyage findById(Long id);
+
+    List<Voyage> findAllToList(int pageNo, int sizePage);
+
+    List<Voyage> findAll();
 }

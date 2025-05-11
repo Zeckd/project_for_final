@@ -11,4 +11,6 @@ public interface TicketService {
     List<Ticket> findAll();
 
     Ticket findById(Long id);
+
+    List<Ticket> findAllToList(int pageNo, int sizePage);
 }
