@@ -56,29 +56,23 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> findAll() {
-        return ticketRepo.findAll();
+        return ticketRepo.findAllTickets();
     }
 
     @Override
     public Ticket findById(Long id) {
-        return ticketRepo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
+        Ticket ticket = ticketRepo.findByIdTicket(id);
+        if(ticket.getDelete() == Delete.INACTIVE)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found");
+        return ticket;
     }
 
     @Override
     public List<Ticket> findAllToList(int pageNo, int sizePage) {
         Pageable pageable = PageRequest.of(pageNo, sizePage);
-        return ticketRepo.findAll(pageable).toList();
+        return ticketRepo.findAllTicket(pageable);
     }
 
-    @Override
-    public Ticket findTicketById(Long ticket) {
-        return ticketRepo.findById(ticket).orElseThrow();
-    }
-
-    @Override
-    public List<Ticket> findAllTransactionsById(Long passengerId, Pageable pageable) {
-        return ticketRepo.findAllTransactionsById(passengerId, pageable);
-    }
 
     @Override
     public PassengerTicketTransactionDto getAllPassengerTransactionsById(Long passengerId, int pageNo, int pageSize) {

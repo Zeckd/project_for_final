@@ -12,9 +12,14 @@ import java.util.List;
 @Repository
 public interface VoyageRepo extends JpaRepository<Voyage, Long> {
 
-    @Query("select u from Voyage u ")
-    List<Voyage> findAllVoyage(Pageable pageable);
+
 
     @Query("select u from Voyage u where u.delete = 0")
-    List<Voyage> findAll();
+    List<Voyage> findAllVoyages();
+
+    @Query("select u from Voyage u where  u.delete = 0")
+    Voyage findByIdVoyage(Long voyageId);
+
+    @Query("select u from Voyage u where u.delete = 0")
+    List<Voyage> findAllVoyage(Pageable pageable);
 }

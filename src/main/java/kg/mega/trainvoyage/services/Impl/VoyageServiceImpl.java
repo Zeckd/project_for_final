@@ -53,12 +53,12 @@ public class VoyageServiceImpl implements VoyageService {
     @Override
     public List<Voyage> findAllToList(int pageNo, int sizePage) {
         Pageable pageable = PageRequest.of(pageNo, sizePage, Sort.by(Sort.Direction.DESC, "id"));
-        return voyageRepo.findAll(pageable).toList();
+        return voyageRepo.findAllVoyage(pageable);
     }
 
     @Override
     public List<Voyage> findAll() {
-        return voyageRepo.findAll();
+        return voyageRepo.findAllVoyages();
     }
 
     @Override
@@ -71,8 +71,10 @@ public class VoyageServiceImpl implements VoyageService {
 
     @Override
     public Voyage findById(Long id) {
-
-        return voyageRepo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voyage not found"));
+        Voyage voyage = voyageRepo.findByIdVoyage(id);
+        if(voyage.getDelete() == Delete.INACTIVE)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voyage not found");
+        return voyage;
     }
 
 }

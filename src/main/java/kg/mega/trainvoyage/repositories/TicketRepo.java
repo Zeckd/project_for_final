@@ -1,5 +1,6 @@
 package kg.mega.trainvoyage.repositories;
 
+import kg.mega.trainvoyage.models.Passenger;
 import kg.mega.trainvoyage.models.Ticket;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +20,11 @@ public interface TicketRepo extends JpaRepository<Ticket, Long> {
 
 
     @Query("select u from Ticket u where u.delete = 0")
-    List<Ticket> findAll();
+    List<Ticket> findAllTickets();
+
+    @Query("select u from Ticket u where  u.delete = 0")
+    Ticket findByIdTicket(Long ticket);
+
+    @Query("select u from Ticket u where u.delete = 0")
+    List<Ticket> findAllTicket(Pageable pageable);
 }

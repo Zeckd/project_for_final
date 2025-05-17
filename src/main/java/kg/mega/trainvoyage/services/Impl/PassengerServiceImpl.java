@@ -39,23 +39,26 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     public List<Passenger> findAllToList(int pageNo, int sizePage) {
         Pageable pageable = PageRequest.of(pageNo, sizePage);
-        return passengerRepo.findAll(pageable).toList();
+        return passengerRepo.findAllPassenger(pageable);
     }
 
     @Override
     public List<Passenger> findAll() {
-        return passengerRepo.findAll();
+        return passengerRepo.findAllPassengers();
     }
 
     @Override
     public Passenger findPassengerById(Long passenger) {
-        return passengerRepo.findById(passenger).orElseThrow();
+        Passenger passenger1 = passengerRepo.findByIdPassenger(passenger);
+        if(passenger1.getDelete() == Delete.INACTIVE)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Passenger not found");
+        return passenger1;
     }
 
     @Override
     public Passenger update(PassengerUpdateDto passengerUpdateDto, Delete delete) {
         Passenger passenger = PassengerMapper.INSTANCE.passengerUpdateDtoToPassenger(passengerUpdateDto);
-        passengerRepo.findById(passengerUpdateDto.id()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Passenger not found"));
+        passengerRepo.findById(passenger.getId()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Passenger not found"));
         passenger.setDelete(delete);
 
         return passengerRepo.save(passenger);

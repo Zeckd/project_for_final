@@ -19,9 +19,7 @@ public interface TicketService {
 
     List<Ticket> findAllToList(int pageNo, int sizePage);
 
-    Ticket findTicketById(Long ticket);
 
-    List<Ticket> findAllTransactionsById(Long passengerId, Pageable pageable);
 
     PassengerTicketTransactionDto getAllPassengerTransactionsById(Long passengerId, int pageNo, int pageSize);
 
