@@ -1,10 +1,13 @@
 package kg.mega.trainvoyage.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.ServletRequest;
 import jakarta.validation.Valid;
+import kg.mega.trainvoyage.enums.Delete;
 import kg.mega.trainvoyage.models.Passenger;
 import kg.mega.trainvoyage.models.Voyage;
 import kg.mega.trainvoyage.models.dto.VoyageCreateDto;
+import kg.mega.trainvoyage.models.dto.VoyageUpdateDto;
 import kg.mega.trainvoyage.services.VoyageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +44,14 @@ public class VoyageController {
         return voyageService.findAllToList(pageNo, sizePage);
     }
     @GetMapping("/all")
+    @Operation(summary = "Получение полного списка", description = "Метод для получения полного списка")
     public List<Voyage> findAll() {
 
         return voyageService.findAll();
+    }
+    @PutMapping("/update")
+    public ResponseEntity<?> update(@Valid @RequestBody VoyageUpdateDto voyageUpdateDto, @RequestParam Delete delete) {
+        Voyage voyage = voyageService.update(voyageUpdateDto, delete);
+        return ResponseEntity.ok(voyage);
     }
 }

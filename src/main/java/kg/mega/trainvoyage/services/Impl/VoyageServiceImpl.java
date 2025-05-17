@@ -1,7 +1,10 @@
 package kg.mega.trainvoyage.services.Impl;
 
+import kg.mega.trainvoyage.enums.Delete;
+import kg.mega.trainvoyage.mappers.VoyageMapper;
 import kg.mega.trainvoyage.models.Voyage;
 import kg.mega.trainvoyage.models.dto.VoyageCreateDto;
+import kg.mega.trainvoyage.models.dto.VoyageUpdateDto;
 import kg.mega.trainvoyage.repositories.VoyageRepo;
 import kg.mega.trainvoyage.services.LocalityService;
 import kg.mega.trainvoyage.services.TrainService;
@@ -56,6 +59,14 @@ public class VoyageServiceImpl implements VoyageService {
     @Override
     public List<Voyage> findAll() {
         return voyageRepo.findAll();
+    }
+
+    @Override
+    public Voyage update(VoyageUpdateDto voyageUpdateDto, Delete delete) {
+        Voyage voyage = VoyageMapper.INSTANCE.voyageUpdateDtoToVoyage(voyageUpdateDto);
+        voyageRepo.findById(voyageUpdateDto.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voyage not found"));
+        voyage.setDelete(delete);
+        return voyageRepo.save(voyage);
     }
 
     @Override

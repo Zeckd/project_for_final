@@ -1,8 +1,9 @@
 package kg.mega.trainvoyage.services.Impl;
 
-import jakarta.persistence.EntityNotFoundException;
+import kg.mega.trainvoyage.enums.Delete;
 import kg.mega.trainvoyage.mappers.PassengerMapper;
 import kg.mega.trainvoyage.models.Passenger;
+import kg.mega.trainvoyage.models.dto.PassengerUpdateDto;
 import kg.mega.trainvoyage.repositories.PassengerRepo;
 import kg.mega.trainvoyage.services.PassengerService;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +32,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public Passenger create(Passenger passenger) {
+
         return passengerRepo.save(passenger);
     }
 
@@ -43,5 +45,19 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     public List<Passenger> findAll() {
         return passengerRepo.findAll();
+    }
+
+    @Override
+    public Passenger findPassengerById(Long passenger) {
+        return passengerRepo.findById(passenger).orElseThrow();
+    }
+
+    @Override
+    public Passenger update(PassengerUpdateDto passengerUpdateDto, Delete delete) {
+        Passenger passenger = PassengerMapper.INSTANCE.passengerUpdateDtoToPassenger(passengerUpdateDto);
+        passengerRepo.findById(passengerUpdateDto.id()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Passenger not found"));
+        passenger.setDelete(delete);
+
+        return passengerRepo.save(passenger);
     }
 }

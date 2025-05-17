@@ -1,11 +1,15 @@
 package kg.mega.trainvoyage.services.Impl;
 
+import kg.mega.trainvoyage.enums.Delete;
 import kg.mega.trainvoyage.mappers.TicketMapper;
 import kg.mega.trainvoyage.models.Carriage;
 import kg.mega.trainvoyage.models.Passenger;
 import kg.mega.trainvoyage.models.Ticket;
 import kg.mega.trainvoyage.models.Voyage;
+import kg.mega.trainvoyage.models.dto.PassengerTicketTransactionDto;
 import kg.mega.trainvoyage.models.dto.TicketCreateDto;
+import kg.mega.trainvoyage.models.dto.TicketTransactionDto;
+import kg.mega.trainvoyage.models.dto.TicketUpdateDto;
 import kg.mega.trainvoyage.repositories.TicketRepo;
 import kg.mega.trainvoyage.services.*;
 import org.springframework.data.domain.PageRequest;
@@ -64,5 +68,41 @@ public class TicketServiceImpl implements TicketService {
     public List<Ticket> findAllToList(int pageNo, int sizePage) {
         Pageable pageable = PageRequest.of(pageNo, sizePage);
         return ticketRepo.findAll(pageable).toList();
+    }
+
+    @Override
+    public Ticket findTicketById(Long ticket) {
+        return ticketRepo.findById(ticket).orElseThrow();
+    }
+
+    @Override
+    public List<Ticket> findAllTransactionsById(Long passengerId, Pageable pageable) {
+        return ticketRepo.findAllTransactionsById(passengerId, pageable);
+    }
+
+    @Override
+    public PassengerTicketTransactionDto getAllPassengerTransactionsById(Long passengerId, int pageNo, int pageSize) {
+
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        List <Ticket> tickets = ticketRepo.findAllTransactionsById(passengerId, pageable);
+        Double totalAmount = ticketRepo.findTotalAmountByPassengerId(passengerId);
+        Passenger passenger = passengerService.findById(passengerId);
+        List<TicketTransactionDto> ticketDtos = TicketMapper.INSTANCE.ticketsToTicketTransactionDtos(tickets);
+
+        return new PassengerTicketTransactionDto(passenger, ticketDtos, totalAmount);
+    }
+
+    @Override
+    public Ticket update(TicketUpdateDto ticketUpdateDto, Delete delete) {
+        Voyage voyage = voyageService.findById(ticketUpdateDto.voyage());
+        Carriage carriage = carriageService.findById(ticketUpdateDto.carriage());
+        Passenger passenger = passengerService.findById(ticketUpdateDto.passenger());
+        Ticket ticket = TicketMapper.INSTANCE.toTicket(passenger, carriage, voyage);
+        ticketRepo.findById(ticketUpdateDto.id()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
+        ticket.setDelete(delete);
+        return ticketRepo.save(ticket);
+
+
     }
 }

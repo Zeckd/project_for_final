@@ -1,9 +1,12 @@
 package kg.mega.trainvoyage.controllers;
 
 import jakarta.validation.Valid;
+import kg.mega.trainvoyage.enums.Delete;
 import kg.mega.trainvoyage.models.Passenger;
 import kg.mega.trainvoyage.models.Voyage;
 import kg.mega.trainvoyage.models.dto.PassengerDto;
+import kg.mega.trainvoyage.models.dto.PassengerUpdateDto;
+import kg.mega.trainvoyage.models.dto.VoyageUpdateDto;
 import kg.mega.trainvoyage.services.PassengerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +44,12 @@ public class PassengerController {
     @GetMapping("/{id}")
     public Passenger getPassengerById(@PathVariable Long id) {
          return passengerService.findById(id);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> update(@Valid @RequestBody PassengerUpdateDto passengerUpdateDto, @RequestParam Delete delete) {
+        Passenger passenger = passengerService.update(passengerUpdateDto, delete);
+
+        return ResponseEntity.ok(passenger);
     }
 }

@@ -1,6 +1,7 @@
 package kg.mega.trainvoyage.models;
 
 import jakarta.persistence.*;
+import kg.mega.trainvoyage.enums.Delete;
 
 @Entity
 @Table(name = "tickets")
@@ -18,8 +19,17 @@ public class Ticket {
     @JoinColumn(name = "carriage_id")
     private Carriage carriage;
     private double price;
+    private Delete delete = Delete.ACTIVE;
 
-public double getPrice() {
+    public Delete getDelete() {
+        return delete;
+    }
+
+    public void setDelete(Delete delete) {
+        this.delete = delete;
+    }
+
+    public double getPrice() {
         return price;
     }
 

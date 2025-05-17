@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import kg.mega.trainvoyage.enums.Delete;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,6 +33,15 @@ public class Voyage {
     private Train train;
     private double distance;
     private double price;
+    private Delete delete = Delete.ACTIVE;
+
+    public Delete getDelete() {
+        return delete;
+    }
+
+    public void setDelete(Delete delete) {
+        this.delete = delete;
+    }
 
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
